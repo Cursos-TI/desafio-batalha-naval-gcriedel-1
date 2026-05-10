@@ -2,20 +2,19 @@
 // Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
 // Siga os comentários para implementar cada parte do desafio.
 
-// Objetivo: Batalha Naval - Tema 1 - Desafio Nível Novato - Modulo 5
+// Objetivo: Batalha Naval - Tema 2 - Desafio Nível Aventureiro - Modulo 5
 
 #include <stdio.h>
 int main() {
 
     // =====================================================
     // criando o tabuleiro 10x10
-    // vou usar uma matriz pra representar o mapa do jogo
-    // tudo começa como água (0)
+    // tudo começa com 0 representando água
     // =====================================================
 
     int tabuleiro[10][10];
 
-    // preenchendo tudo com 0 (água mesmo)
+    // preenchendo toda a matriz com 0
 
     for (int i = 0; i < 10; i++) {
 
@@ -26,52 +25,158 @@ int main() {
     }
 
     // =====================================================
-    // criando os navios
-    // cada navio vai ter tamanho 3
-    // aqui a gente só marca eles como "3"
+    // tamanho padrão dos navios
+    // todos terão tamanho 3
     // =====================================================
 
-    int navioHorizontal[3] = {3, 3, 3};
-    int navioVertical[3]   = {3, 3, 3};
+    int tamanhoNavio = 3;
 
     // =====================================================
-    // posicionamento dos navios
-    // escolhi manualmente as coordenadas aqui
-    // (sem input do usuário pra simplificar)
+    // NAVIO HORIZONTAL
     // =====================================================
 
-    // navio horizontal (linha fixa, coluna varia)
-    int linhaH = 2;
-    int colunaH = 3;
+    int linhaH = 1;
+    int colunaH = 2;
 
-    // navio vertical (coluna fixa, linha varia)
+    // validação simples pra garantir
+    // que o navio não saia do tabuleiro
+
+    if (colunaH + tamanhoNavio <= 10) {
+
+        // verificando se já existe outro navio ali
+
+        int podePosicionar = 1;
+
+        for (int i = 0; i < tamanhoNavio; i++) {
+
+            if (tabuleiro[linhaH][colunaH + i] != 0) {
+
+                podePosicionar = 0;
+            }
+        }
+
+        // se estiver tudo livre
+        // posiciona o navio
+
+        if (podePosicionar == 1) {
+
+            for (int i = 0; i < tamanhoNavio; i++) {
+
+                tabuleiro[linhaH][colunaH + i] = 3;
+            }
+        }
+    }
+
+    // =====================================================
+    // NAVIO VERTICAL
+    // =====================================================
+
     int linhaV = 5;
     int colunaV = 7;
 
-    // =====================================================
-    // colocando o navio horizontal no tabuleiro
-    // cuidado pra não sair fora da matriz
-    // =====================================================
+    // validação de limite
 
-    for (int i = 0; i < 3; i++) {
+    if (linhaV + tamanhoNavio <= 10) {
 
-        // aqui é tipo: mesma linha, mudando colunas
-        tabuleiro[linhaH][colunaH + i] = navioHorizontal[i];
+        int podePosicionar = 1;
+
+        // verificando sobreposição
+
+        for (int i = 0; i < tamanhoNavio; i++) {
+
+            if (tabuleiro[linhaV + i][colunaV] != 0) {
+
+                podePosicionar = 0;
+            }
+        }
+
+        // posicionando o navio
+
+        if (podePosicionar == 1) {
+
+            for (int i = 0; i < tamanhoNavio; i++) {
+
+                tabuleiro[linhaV + i][colunaV] = 3;
+            }
+        }
     }
 
     // =====================================================
-    // colocando o navio vertical no tabuleiro
-    // aqui muda a linha e a coluna fica fixa
+    // NAVIO DIAGONAL DESCENDO
+    // aqui linha e coluna aumentam juntas
     // =====================================================
 
-    for (int i = 0; i < 3; i++) {
+    int linhaD1 = 0;
+    int colunaD1 = 0;
 
-        tabuleiro[linhaV + i][colunaV] = navioVertical[i];
+    // validação simples de limite
+
+    if ((linhaD1 + tamanhoNavio <= 10) &&
+        (colunaD1 + tamanhoNavio <= 10)) {
+
+        int podePosicionar = 1;
+
+        // verificando se já existe navio
+
+        for (int i = 0; i < tamanhoNavio; i++) {
+
+            if (tabuleiro[linhaD1 + i][colunaD1 + i] != 0) {
+
+                podePosicionar = 0;
+            }
+        }
+
+        // posicionando na diagonal
+
+        if (podePosicionar == 1) {
+
+            for (int i = 0; i < tamanhoNavio; i++) {
+
+                tabuleiro[linhaD1 + i][colunaD1 + i] = 3;
+            }
+        }
     }
 
     // =====================================================
-    // exibindo o tabuleiro
-    // aqui uso loops aninhados pra imprimir tudo bonitinho
+    // NAVIO DIAGONAL SUBINDO
+    // aqui a linha aumenta e a coluna diminui
+    // =====================================================
+
+    int linhaD2 = 2;
+    int colunaD2 = 9;
+
+    // validação pra não sair do tabuleiro
+
+    if ((linhaD2 + tamanhoNavio <= 10) &&
+        (colunaD2 - tamanhoNavio + 1 >= 0)) {
+
+        int podePosicionar = 1;
+
+        // verificando sobreposição
+
+        for (int i = 0; i < tamanhoNavio; i++) {
+
+            if (tabuleiro[linhaD2 + i][colunaD2 - i] != 0) {
+
+                podePosicionar = 0;
+            }
+        }
+
+        // posicionando o navio diagonal
+
+        if (podePosicionar == 1) {
+
+            for (int i = 0; i < tamanhoNavio; i++) {
+
+                tabuleiro[linhaD2 + i][colunaD2 - i] = 3;
+            }
+        }
+    }
+
+    // =====================================================
+    // mostrando o tabuleiro na tela
+    // aqui os 0 representam água
+    // e os 3 representam partes dos navios
     // =====================================================
 
     printf("=== TABULEIRO BATALHA NAVAL ===\n\n");
@@ -80,7 +185,6 @@ int main() {
 
         for (int j = 0; j < 10; j++) {
 
-            // só pra ficar mais legível na tela
             printf("%d ", tabuleiro[i][j]);
         }
 
@@ -89,7 +193,6 @@ int main() {
 
     // =====================================================
     // fim do programa
-    // aqui já tá tudo montado e exibido
     // =====================================================
 
     return 0;
